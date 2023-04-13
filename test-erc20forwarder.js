@@ -20,6 +20,12 @@ const GaslessTxn = async () => {
     debug: true,
     contractAddresses: [tokenAddress], // list of contract address you want to enable gasless on
   });
+
+  let ercForwarderClient;
+  let permitClient;
+
+  const abi = ["function transfer(address to, uint amount) returns (bool)"];
+
   // console.log("bico setup: ", biconomy.erc20ForwarderClient);
   biconomy
     .onEvent(biconomy.READY, async () => {
@@ -28,11 +34,11 @@ const GaslessTxn = async () => {
 
       let ethersProvider = new ethers.providers.Web3Provider(biconomy);
 
-      //   const contractInstance = new ethers.Contract(
-      //     contractAddress,
-      //     abi,
-      //     biconomy.getSignerByAddress(address)
-      //   );
+      const contract = new ethers.Contract(
+        tokenAddress,
+        abi,
+        biconomy.getSignerByAddress(address)
+      );
 
       let contractInterface = new ethers.utils.Interface(abi);
 
